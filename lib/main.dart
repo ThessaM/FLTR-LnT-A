@@ -28,19 +28,19 @@ class ContainerList extends StatelessWidget {
         Expanded(
           flex: 1,
           child: Container(
-            color: Colors.red
+            color: Colors.lime
           )
         ),
         Expanded(
           flex: 3,
           child: Container(
-            color: Colors.blue
+            color: Colors.blueGrey
           )
         ),
         Flexible(
           fit: .loose,
           child: Container(
-            color: Colors.amber,
+            color: Colors.pink,
             height: 50,
           )
         ),

@@ -28,7 +28,7 @@ class ContainerList extends StatelessWidget {
         Expanded(
           flex: 1,
           child: Container(
-            color: Colors.amber
+            color: Colors.blueAccent
           )
         ),
         Expanded(

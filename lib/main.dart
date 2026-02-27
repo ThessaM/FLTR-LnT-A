@@ -9,12 +9,42 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       home: Scaffold(
         body: Center(
-          child: Text('Hello World!'),
+          child: ContainerList()
         ),
       ),
+    );
+  }
+}
+
+class ContainerList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: .center,
+      children: [
+        Expanded(
+          flex: 1,
+          child: Container(
+            color: Colors.red
+          )
+        ),
+        Expanded(
+          flex: 3,
+          child: Container(
+            color: Colors.blue
+          )
+        ),
+        Flexible(
+          fit: .loose,
+          child: Container(
+            color: Colors.amber,
+            height: 50,
+          )
+        ),
+      ],
     );
   }
 }

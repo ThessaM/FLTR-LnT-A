@@ -258,7 +258,7 @@ class _VideoStylingPageState extends State<VideoStylingPage> {
   late VideoPlayerController controller;
   String selectedStyle = "Circle";
 
-  final styles = ["Circle", "Color Filter", "Rounded", "Border", "Shadow"];
+  final styles = ["Circle", "Color Filter", "Rounded", "Border", "Shadow", "All"];
 
   @override
   void initState() {
@@ -343,6 +343,24 @@ class _VideoStylingPageState extends State<VideoStylingPage> {
             boxShadow: [BoxShadow(color: Colors.red, blurRadius: 10, spreadRadius: 5)]
           ),
           child: VideoPlayer(controller),
+        );
+
+      case "All":
+        return Container(
+          height: 150,
+          width: 150,
+          decoration: BoxDecoration(
+            borderRadius: .circular(20),
+            boxShadow: [BoxShadow(color: Colors.red, blurRadius: 10, spreadRadius: 5)],
+            border: .all(color: Colors.lime, width: 5)
+          ),
+          child: ClipRRect(
+            borderRadius: .circular(16),
+            child: ColorFiltered(
+              colorFilter: .mode(Colors.white, .color),
+              child: VideoPlayer(controller)
+            )
+          ),
         );
 
       default:

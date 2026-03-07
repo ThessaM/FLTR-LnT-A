@@ -63,61 +63,72 @@ class _ProductPageState extends State<ProductPage> {
         ],
       ),
 
-      body: ListView.builder(
-        padding: EdgeInsets.all(12),
-        itemCount: products.length,
-        itemBuilder: (context, index) {
-          final product = products[index];
-
-          return Card(
-            elevation: 3,
-            margin: EdgeInsets.only(bottom: 12),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
-            ),
-
-            child: ListTile(
-              contentPadding: EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 10,
-              ),
-
-              leading: CircleAvatar(
-                radius: 25,
-                backgroundColor: Colors.teal[100],
-                child: Icon(Icons.shopping_bag, color: Colors.teal),
-              ),
-
-              title: Text(
-                product.name,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              ),
-
-              subtitle: Text(
-                "\$${product.price}",
-                style: TextStyle(
-                  color: Colors.teal,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-
-              trailing: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal,
+      body: Column(
+        mainAxisAlignment: .center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text("Welcome, ${context.select<Userprovider, String>((value) =>  value.username,)}"),
+          ),
+          Expanded(
+            child: ListView.builder(
+              padding: EdgeInsets.all(12),
+              itemCount: products.length,
+              itemBuilder: (context, index) {
+                final product = products[index];
+            
+                return Card(
+                  elevation: 3,
+                  margin: EdgeInsets.only(bottom: 12),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(15),
                   ),
-                ),
-                onPressed: () {
-                  //TODO: Add Item to Cart
-                  // addToCart(product);
-                  context.read<Cartprovider>().addToCart(product);
-                },
-                child: Text("Add", style: TextStyle(color: Colors.white)),
-              ),
+            
+                  child: ListTile(
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 10,
+                    ),
+            
+                    leading: CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Colors.teal[100],
+                      child: Icon(Icons.shopping_bag, color: Colors.teal),
+                    ),
+            
+                    title: Text(
+                      product.name,
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+            
+                    subtitle: Text(
+                      "\$${product.price}",
+                      style: TextStyle(
+                        color: Colors.teal,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+            
+                    trailing: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.teal,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      onPressed: () {
+                        //TODO: Add Item to Cart
+                        // addToCart(product);
+                        context.read<Cartprovider>().addToCart(product);
+                      },
+                      child: Text("Add", style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                );
+              },
             ),
-          );
-        },
+          ),
+        ],
       ),
 
       floatingActionButton: Stack(

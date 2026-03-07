@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:main_fltr_lnt_a/model/Product.dart';
+import 'package:main_fltr_lnt_a/provider/CartProvider.dart';
+import 'package:provider/provider.dart';
 
 
 class CartPage extends StatelessWidget {
+
+  // final List<Product> cart;
+  // final Function(int) removeItem;
+
+  // CartPage({super.key, required this.cart, required this.removeItem});
   CartPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     //TODO: Get item from list
-    final cart = [];
+    final cart = context.watch<Cartprovider>().cart;
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -89,6 +97,8 @@ class CartPage extends StatelessWidget {
                       ),
                       onPressed: () {
                         //TODO: Remove item from list
+                        // removeItem(index);
+                        context.read<Cartprovider>().removeFromCart(index);
                       },
                     ),
                   ),

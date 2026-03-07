@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:main_fltr_lnt_a/CartPage.dart';
+import 'package:main_fltr_lnt_a/LoginPage.dart';
 import 'package:main_fltr_lnt_a/model/Product.dart';
+import 'package:main_fltr_lnt_a/provider/CartProvider.dart';
+import 'package:main_fltr_lnt_a/provider/UserProvider.dart';
+import 'package:provider/provider.dart';
 
 class ProductPage extends StatefulWidget {
   ProductPage({super.key});
@@ -10,19 +14,31 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-
-  final cartCount = 0;
-
   final List<Product> products = [
     Product("Apple", 2.5),
     Product("Banana", 1.2),
     Product("Orange", 3),
   ];
 
+  // List<Product> cartProduct = [];
+
+  // void addToCart(Product item){
+  //   setState(() {
+  //     cartProduct.add(item);
+  //   });
+  // }
+
+  // void removeItem(int index) {
+  //   setState(() {
+  //     cartProduct.removeAt(index);
+  //   });
+  // }
+
   @override
   Widget build(BuildContext context) {
-
     //TODO: Get Cart Length
+    // final cartCount = cartProduct.length;
+    final cartCount = context.watch<Cartprovider>().cart.length;
 
     return Scaffold(
       backgroundColor: Colors.grey[100],
@@ -31,13 +47,26 @@ class _ProductPageState extends State<ProductPage> {
         title: Text("Simple Shop"),
         centerTitle: true,
         backgroundColor: Colors.teal,
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              context.read<Userprovider>().logout();
+            },
+            child: Icon(Icons.logout, color: Colors.white,),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.teal,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+        ],
       ),
 
       body: ListView.builder(
         padding: EdgeInsets.all(12),
         itemCount: products.length,
         itemBuilder: (context, index) {
-
           final product = products[index];
 
           return Card(
@@ -48,24 +77,20 @@ class _ProductPageState extends State<ProductPage> {
             ),
 
             child: ListTile(
-              contentPadding:
-                  EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 10,
+              ),
 
               leading: CircleAvatar(
                 radius: 25,
                 backgroundColor: Colors.teal[100],
-                child: Icon(
-                  Icons.shopping_bag,
-                  color: Colors.teal,
-                ),
+                child: Icon(Icons.shopping_bag, color: Colors.teal),
               ),
 
               title: Text(
                 product.name,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
 
               subtitle: Text(
@@ -85,11 +110,10 @@ class _ProductPageState extends State<ProductPage> {
                 ),
                 onPressed: () {
                   //TODO: Add Item to Cart
+                  // addToCart(product);
+                  context.read<Cartprovider>().addToCart(product);
                 },
-                child: Text(
-                  "Add",
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: Text("Add", style: TextStyle(color: Colors.white)),
               ),
             ),
           );
@@ -98,16 +122,25 @@ class _ProductPageState extends State<ProductPage> {
 
       floatingActionButton: Stack(
         children: [
-
           FloatingActionButton(
             backgroundColor: Colors.teal,
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => CartPage()),
-              );
+              if (context.read<Userprovider>().isLoggedIn()) {
+                Navigator.push(
+                  context,
+                  // MaterialPageRoute(builder: (_) => CartPage(cart: cartProduct, removeItem: (index) {
+                  //   removeItem(index);
+                  // },)),
+                  MaterialPageRoute(builder: (_) => CartPage()),
+                );
+              } else {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (_) => Loginpage()),
+                );
+              }
             },
-            child: Icon(Icons.shopping_cart, color: Colors.white,),
+            child: Icon(Icons.shopping_cart, color: Colors.white),
           ),
 
           if (cartCount > 0)
@@ -118,13 +151,10 @@ class _ProductPageState extends State<ProductPage> {
                 backgroundColor: Colors.redAccent,
                 child: Text(
                   cartCount.toString(),
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.white,
-                  ),
+                  style: TextStyle(fontSize: 12, color: Colors.white),
                 ),
               ),
-            )
+            ),
         ],
       ),
     );

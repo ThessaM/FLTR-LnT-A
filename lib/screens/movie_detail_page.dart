@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:main_fltr_lnt_a/blocs/movie_bloc.dart';
 import 'package:main_fltr_lnt_a/models/movie.dart';
 
 
@@ -81,6 +83,9 @@ class MovieDetailPage extends StatelessWidget {
 
                   SizedBox(height: 12),
 
+                  ElevatedButton(onPressed: () {
+                    context.read<MovieBloc>().add(DeleteMovie(movie.id));
+                  }, child: Text("Delete Movie"))
                 ],
               ),
             ),

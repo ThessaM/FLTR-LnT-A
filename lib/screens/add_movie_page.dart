@@ -19,10 +19,14 @@ class AddMoviePage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Add New Movie"),
+      ),
       body: Padding(
         padding: EdgeInsets.all(16),
         child: Column(
           children: [
+            SizedBox(height: 20,),
             TextField(
               controller: title, style: TextStyle(color: Colors.white),
               decoration: InputDecoration(labelText: 'Title'),
@@ -60,7 +64,8 @@ class AddMoviePage extends StatelessWidget{
               try{
 
                 var movie = Movie(id: "id", title: title.text, image: image.text, rating: double.parse(rating.text), description: description.text, length: int.parse(length.text));
-                context.read<MovieBloc>().add(AddMovie(movie));
+                context.read<MovieBloc>().add(AddMovie(movie, userId));
+                Navigator.pop(context);
 
               }catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(

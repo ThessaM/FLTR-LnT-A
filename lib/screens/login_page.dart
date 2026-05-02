@@ -11,6 +11,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+  TextEditingController phoneNumber = TextEditingController();
   bool isLogin = true;
 
   @override
@@ -21,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
         child: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state is AuthSuccess) {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage(state.userId),));
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(state.userId),));
             }
           },
           builder: (context, state) {
@@ -34,12 +35,14 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: 20),
                 TextField(controller: password, obscureText: true, decoration: InputDecoration(labelText: 'Password',), style: TextStyle(color: Colors.white)),
                 SizedBox(height: 20),
+                if(!isLogin) TextField(controller: phoneNumber, decoration: InputDecoration(labelText: 'Phone Number',), style: TextStyle(color: Colors.white),),
+                SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     if(isLogin) {
                       context.read<AuthBloc>().add(LoginEvent(email.text, password.text));
                     } else {
-                      context.read<AuthBloc>().add(RegisterEvent(email.text, password.text));
+                      context.read<AuthBloc>().add(RegisterEvent(email.text, password.text, phoneNumber.text));
                     }
                   },
                   child: Text(isLogin ? 'Login' : 'Register'),

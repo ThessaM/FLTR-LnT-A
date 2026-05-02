@@ -73,18 +73,17 @@ class MovieDetailPage extends StatelessWidget {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        
+                        context.read<MovieBloc>().add(ToggleFavorite(userId, movie));
                       },
-                      child: Text(
-                        'Add to Favorites',
-                      ),
+                      child: isFav? Text("Remove from Favorites"): Text("Add to Favorites"),
                     ),
                   ),
 
                   SizedBox(height: 12),
 
                   ElevatedButton(onPressed: () {
-                    context.read<MovieBloc>().add(DeleteMovie(movie.id));
+                    context.read<MovieBloc>().add(DeleteMovie(movie.id, userId));
+                    Navigator.pop(context);
                   }, child: Text("Delete Movie"))
                 ],
               ),

@@ -1,9 +1,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:main_fltr_lnt_a/blocs/auth_bloc.dart';
 import 'package:main_fltr_lnt_a/blocs/movie_bloc.dart';
 import 'package:main_fltr_lnt_a/screens/add_movie_page.dart';
 import 'package:main_fltr_lnt_a/screens/favorite_page.dart';
+import 'package:main_fltr_lnt_a/screens/login_page.dart';
 import 'package:main_fltr_lnt_a/screens/movie_detail_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,31 +22,40 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    context.read<MovieBloc>().add(LoadMovie());
+    context.read<MovieBloc>().add(LoadMovie(widget.userId));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(index == 0 ? 'Movies' : 'Favorites'),
-      ),
-      body: index == 0 ? buildMovies() : FavoritePage(widget.userId),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: index,
-        onTap: (i) => setState(() => index = i),
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.movie), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Favorites'),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.white,
-        child: Icon(Icons.add, color: Colors.red,),
-        onPressed: () async {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => AddMoviePage(widget.userId),));
-      },),
-    );
+    return BlocConsumer<AuthBloc, AuthState>(builder: (context, state) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(index == 0 ? 'Movies' : 'Favorites'),
+          actions: [
+            IconButton(onPressed: () {
+              context.read<AuthBloc>().add(LogoutEvent());
+            }, icon: Icon(Icons.logout))
+          ],
+        ),
+        body: index == 0 ? buildMovies() : FavoritePage(widget.userId),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: index,
+          onTap: (i) => setState(() => index = i),
+          items: [
+            BottomNavigationBarItem(icon: Icon(Icons.movie), label: 'Home'),
+            BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Favorites'),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.white,
+          child: Icon(Icons.add, color: Colors.red,),
+          onPressed: () async {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => AddMoviePage(widget.userId),));
+        },),
+      );
+    }, listener: (context, state) {
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage(),));
+    },);
   }
 
   Widget buildMovies() {
@@ -55,7 +66,7 @@ class _HomePageState extends State<HomePage> {
             itemCount: state.movies.length,
             itemBuilder: (context, i) {
               var m = state.movies[i];
-              var isFav = false;
+              var isFav = state.favorites.contains(m.id);
           
               return Card(
                 color: Colors.grey[900],
@@ -77,6 +88,7 @@ class _HomePageState extends State<HomePage> {
                   trailing: IconButton(
                     icon: Icon(isFav ? Icons.favorite : Icons.favorite_border, color: Colors.red),
                     onPressed: () {
+                      context.read<MovieBloc>().add(ToggleFavorite(widget.userId, m));
                     },
                   ),
                   onTap: () {

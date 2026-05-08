@@ -156,3 +156,4 @@ app.*.symbols
 firebase.json
 .firebaserc
 android/app/google-services.json
+lib/firebase_options.dart

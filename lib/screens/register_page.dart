@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:main_fltr_lnt_a/blocs/auth_bloc.dart';
 
 
 class RegisterPage extends StatefulWidget {
@@ -42,7 +44,9 @@ class _RegisterPageState extends State<RegisterPage> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.read<AuthBloc>().add(RegisterEvent(emailController.text, passwordController.text));
+                  },
                   child: Text('Register'),
                 ),
               ),

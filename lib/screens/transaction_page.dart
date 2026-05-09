@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:main_fltr_lnt_a/blocs/transaction_bloc.dart';
 import 'package:main_fltr_lnt_a/models/transaction_model.dart';
 
 class TransactionPage extends StatefulWidget {
@@ -219,6 +221,12 @@ class _TransactionPageState extends State<TransactionPage> {
                             type: type,
                             date: selectedDate,
                           );
+
+                          if(isEdit) {
+                            context.read<TransactionBloc>().add(UpdateTransactions(transaction));
+                          }else{
+                            context.read<TransactionBloc>().add(AddTransactions(transaction));
+                          }
 
                           Navigator.pop(context);
                         }

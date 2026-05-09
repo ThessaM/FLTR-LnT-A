@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:main_fltr_lnt_a/blocs/auth_bloc.dart';
 import 'package:main_fltr_lnt_a/screens/register_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -64,7 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: ElevatedButton(
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
-                        
+                        context.read<AuthBloc>().add(LoginEvent(emailController.text, passwordController.text));
                       }
                     },
                     child: Text('Login'),
